@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "echo \"Error: no start specified\" && exit 1",
-    "postinstall": "echo \"Error: no postinstall specified\" && exit 0",
+    "postinstall": "bower install",
     "preinstall": "echo \"Error: no preinstall specified\" && exit 0",
     "build": "echo \"Error: no build specified\" && exit 1",
     "test": "echo \"Error: no test specified\" && exit 1"
