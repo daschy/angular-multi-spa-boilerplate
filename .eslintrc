@@ -1,0 +1,30 @@
+{
+  "extends": [
+    "airbnb-base/legacy",
+    "angular"
+  ],
+  "rules": {
+    "no-console": [
+      "off"
+    ],
+    "yoda": [
+      "on"
+    ],
+    "no-template-curly-in-string": [
+      "off"
+    ],
+    "comma-dangle": [
+      "error",
+      "always-multiline"
+    ],
+    "func-names": [
+      "error",
+      "never"
+    ],
+    "indent": 2
+  },
+  "env": {},
+  "plugins": [
+    "angular"
+  ]
+}

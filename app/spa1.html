@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html ng-app="public">
+
+  <head>
+    <title></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+
+
+    <link href="styles/spa1.css" type="text/css" rel="stylesheet">
+
+    <!-- build:vendorsCSS(./) styles/vendors.css-->
+    
+    <!-- endbuild -->
+
+    <link href="img/favicon.ico" rel="shortcut icon">
+  </head>
+
+  <body class="spa1" ng-controller="Spa1Ctrl" ng-cloak >
+
+    <!-- Also a way to navigate -->
+
+    <div>
+      <module1-comp1></module1-comp1>
+      <sp1-comp1></spa1-comp1>
+      <main>
+        <div ui-view></div>
+        <a ui-sref="i18n.dashboard"></a>
+        <a ui-sref="i18n.anonymous"></a>
+        <a ui-sref="i18n.profile"></a>
+      </main>
+    </div>
+
+
+    <!-- JS from Bower Components -->
+    <!-- build:vendorsJS(./) scripts/vendors-spa1.js -->
+    <script src="bower_components/angular/angular.js"></script>
+   
+    <!-- endbuild -->
+    <!-- Add New Bower Component JS Above -->
+
+
+
+    <!-- Main App JS -->
+    <!-- build:appJS(app/) scripts/spa1.js -->
+    <script src="public/spa1.module.js"></script>
+    <script src="public/spa1.js"></script>
+    <!--MODULE components-->
+    <script src="module1/module1.module.js"></script>
+    <script src="module1/module1comp1/module1comp1.component.js"></script>
+    <!-- endbuild -->
+    <!-- Add New Component JS Above -->
+
+    <script src="config.js"></script>
+  </body>
+
+</html>
