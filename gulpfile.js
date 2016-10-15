@@ -1,3 +1,4 @@
+'use strict';
 
 var gulp = require('gulp');
 var concat = require('gulp-concat');
@@ -14,7 +15,6 @@ var filter = require('gulp-filter');
 var gutil = require('gulp-util');
 var usemin = require('gulp-usemin');
 var sass = require('gulp-sass');
-var replace = require('gulp-replace');
 var preprocess = require('gulp-preprocess');
 var genv = require('gulp-env');
 var lint = require('gulp-eslint');
@@ -25,25 +25,23 @@ var _ = require('lodash');
 var streamqueue = require('streamqueue');
 var fs = require('fs');
 
-var htmlminOptions = {
-  collapseBooleanAttributes: true,
-  collapseWhitespace: true,
-  removeAttributeQuotes: true,
-  removeComments: true,
-  removeEmptyAttributes: true,
-  // removeRedundantAttributes: true,
-  removeScriptTypeAttributes: true,
-  removeStyleLinkTypeAttributes: true,
+var constants = {
+  dirApp: 'app',
+  dirFont: 'content/fonts',
+  dirImg: 'content/img',
+  dirDist: 'dist',
+  dirConfig: 'config',
+  bowerComponentsDir: 'bower_components',
+  paramAppName: 'app',
 };
+
 
 gulp.task('set-env', [], function () {
   var envFile = gutil.env.envFile;
   var envApp = gutil.env.app;
-  if (!envApp)
+  if (envApp === false)
   {
     gutil.log(gutil.colors.red('option "--app" is missing'));
-    // gutil.beep();
-    // this.emit('end');
     process.exit(0);
   } else
   {
@@ -52,7 +50,7 @@ gulp.task('set-env', [], function () {
     });
   }
   // ADD HERE new env vars
-  return gulp.src(['config/config.js'])
+  return gulp.src(['config/env.js'])
     .pipe(preprocess({
       context: _.merge({}, gutil.env),
     }))
@@ -135,7 +133,16 @@ gulp.task('html-dev', [], function () {
 
 gulp.task('html', [], function () {
   var templateStream = gulp.src(['!app/*.html', 'app/**/*.html'])
-    .pipe(htmlmin(htmlminOptions))
+    .pipe(htmlmin({
+      collapseBooleanAttributes: true,
+      collapseWhitespace: true,
+      removeAttributeQuotes: true,
+      removeComments: true,
+      removeEmptyAttributes: true,
+      // removeRedundantAttributes: true,
+      removeScriptTypeAttributes: true,
+      removeStyleLinkTypeAttributes: true,
+    }))
     .pipe(ngHtml2js({
       moduleName: gutil.env.app,
     }))
