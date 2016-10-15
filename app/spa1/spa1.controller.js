@@ -1,12 +1,8 @@
-(function () {
- 'use strict';
+'use strict';
 
- angular
-  .module('public')
-  .controller('Spa1Ctrl', Spa1Ctrl);
+angular.module('spa1').controller('Spa1Ctrl', Spa1Ctrl);
 
- Spa1Ctrl.$inject = ['$log'];
- function PublicController($log) {
+Spa1Ctrl.$inject = ['$log'];
+function Spa1Ctrl($log) {
   $log.log('Spa1Ctrl loaded');
- }
-})();
+}

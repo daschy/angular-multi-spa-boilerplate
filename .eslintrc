@@ -7,9 +7,7 @@
     "no-console": [
       "off"
     ],
-    "yoda": [
-      "on"
-    ],
+    "yoda": 2,
     "no-template-curly-in-string": [
       "off"
     ],
@@ -21,10 +19,18 @@
       "error",
       "never"
     ],
-    "indent": 2
+    "indent": 1,
+    "angular/controller-name": 0,
+    "strict": [
+      "error",
+      "global"
+    ]
   },
-  "env": {},
+  "env": {
+    
+  },
   "plugins": [
-    "angular"
+    "angular",
+    "json"
   ]
 }

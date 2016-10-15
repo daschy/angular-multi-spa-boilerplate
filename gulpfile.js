@@ -8,13 +8,8 @@ var ngHtml2js = require('gulp-ng-html2js');
 var ngAnnotate = require('gulp-ng-annotate');
 var htmlmin = require('gulp-htmlmin');
 var cssmin = require('gulp-cssmin');
-var streamqueue = require('streamqueue');
-var rimraf = require('rimraf');
 var rename = require('gulp-rename');
-var jshint = require('gulp-jshint');
-var stylish = require('jshint-stylish');
-var browserSync = require('browser-sync').create();
-
+var rev = require('gulp-rev');
 var filter = require('gulp-filter');
 var gutil = require('gulp-util');
 var usemin = require('gulp-usemin');
@@ -22,11 +17,13 @@ var sass = require('gulp-sass');
 var replace = require('gulp-replace');
 var preprocess = require('gulp-preprocess');
 var genv = require('gulp-env');
+var lint = require('gulp-eslint');
+var rimraf = require('rimraf');
 var runSequence = require('run-sequence');
+var browserSync = require('browser-sync').create();
 var _ = require('lodash');
-var nodeBourbon = require('node-bourbon');
-
-var rev = require('gulp-rev');
+var streamqueue = require('streamqueue');
+var fs = require('fs');
 
 var htmlminOptions = {
   collapseBooleanAttributes: true,
@@ -67,7 +64,7 @@ gulp.task('set-env', [], function () {
     ));
 });
 
-gulp.task('serve', ['clean', 'translations', 'html-dev', 'set-env', 'fonts', 'images', 'styles'], function () {
+gulp.task('serve', ['clean', 'html-dev', 'set-env', 'fonts', 'images', 'styles'], function () {
   var routes = {};
   _.set(routes, _.template('/dist/${app}/bower_components')({
     app: gutil.env.app,
@@ -77,8 +74,7 @@ gulp.task('serve', ['clean', 'translations', 'html-dev', 'set-env', 'fonts', 'im
   }), 'app');
   browserSync.init({
     host: '0.0.0.0',
-    port: 8081,
-    open: false,
+    open: true,
     server: {
       baseDir: '.',
       index: 'index.html',
@@ -97,7 +93,7 @@ gulp.task('serve', ['clean', 'translations', 'html-dev', 'set-env', 'fonts', 'im
 
   gulp.watch('{app/,content/,styleguide/}{,**/}*.{less,scss,sass,css}', ['styles', 'set-env']);
   gulp.watch('content/{,**/}*.json').on('change', browserSync.reload);
-  gulp.watch('app/**/*.{html,js}', ['jshint']).on('change', browserSync.reload);
+  gulp.watch('app/**/*.{html,js}', ['lint']).on('change', browserSync.reload);
   gulp.watch('app/*.html', ['html-dev']).on('change', browserSync.reload);
 });
 
@@ -113,14 +109,12 @@ gulp.task('styles', [], function () {
     .pipe(sass({
       outputStyle: 'nested',
       includePaths: [
-        nodeBourbon.includePaths,
         'bower_components/foundation/scss/',
       ],
     }).on('error', sass.logError))
     .pipe(concat(_.template('${app}.css')({
       app: gutil.env.app,
     })))
-    .pipe(replace('portalserver/static/com.peermatch.backbase.portal/media/', gutil.env.app + '/images/'))
     .pipe(gulp.dest(_.template('dist/${app}/styles')({
       app: gutil.env.app,
     })))
@@ -184,7 +178,7 @@ gulp.task('html', [], function () {
     })));
 });
 gulp.task('images', [], function () {
-  return gulp.src('content/images/{,**/}*')
+  return gulp.src('content/img/{,**/}*.*')
     .pipe(imagemin())
     .pipe(gulp.dest(_.template('dist/${app}/img')({
       app: gutil.env.app,
@@ -192,18 +186,17 @@ gulp.task('images', [], function () {
 });
 
 gulp.task('fonts', [], function () {
-  return gulp.src(['content/fonts/{,**/}*.*', 'styleguide/src/app/fonts/{,**/}*.*'])
+  return gulp.src(['content/fonts/{,**/}*.*'])
     .pipe(gulp.dest(_.template('dist/${app}/fonts')({
       app: gutil.env.app,
     })));
 });
 
-gulp.task('jshint', function () {
+gulp.task('lint', function () {
   gulp.src(['{app,config}/{,**/}*.{js,json}'])
-    .pipe(jshint())
-    .pipe(jshint.reporter(stylish));
+    .pipe(lint())
+    .pipe(lint.format());
 });
-
 
 gulp.task('optimize', function () {
   var jsFiles = gulp.src(['dist/{,**/}*.js'])
@@ -225,18 +218,20 @@ gulp.task('optimize', function () {
   return combined.done();
 });
 
-gulp.task('build-spa1', function (cb) {
-  gutil.env.app = 'spa1';
-  runSequence('build', cb);
+gulp.task('build-all', ['clean'], function (cb) {
+  var appList = fs.readdirSync('app')
+    .filter(function (file) { return file.substr(-5) === '.html'; })
+    .map(function (fileName) { return fileName.slice(0, -5); });
+  var taskList = appList.map(function (appName) {
+    var taskName = 'build-' + appName;
+    gulp.task(taskName, function () {
+      gutil.env.app = appName;
+      runSequence('build');
+    });
+    return taskName;
+  });
+  console.log(taskList);
+  runSequence('clean', taskList, cb);
 });
 
-gulp.task('build-spa2', function (cb) {
-  gutil.env.app = 'spa2';
-  runSequence('build', cb);
-});
-
-gulp.task('build-all', function (cb) {
-  runSequence('clean', 'build-spa1', 'build-spa2', cb);
-});
-
-gulp.task('build', ['set-env', 'translations', 'styles', 'images', 'fonts', 'html']);
+gulp.task('build', ['set-env', 'styles', 'images', 'fonts', 'html']);

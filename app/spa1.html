@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng-app="public">
+<html ng-app="spa1">
 
   <head>
     <title></title>
@@ -22,13 +22,7 @@
 
     <div>
       <module1-comp1></module1-comp1>
-      <sp1-comp1></spa1-comp1>
-      <main>
-        <div ui-view></div>
-        <a ui-sref="i18n.dashboard"></a>
-        <a ui-sref="i18n.anonymous"></a>
-        <a ui-sref="i18n.profile"></a>
-      </main>
+      <spa1-comp1></spa1-comp1>
     </div>
 
 
@@ -39,12 +33,11 @@
     <!-- endbuild -->
     <!-- Add New Bower Component JS Above -->
 
-
-
     <!-- Main App JS -->
     <!-- build:appJS(app/) scripts/spa1.js -->
-    <script src="public/spa1.module.js"></script>
-    <script src="public/spa1.js"></script>
+    <script src="spa1/spa1.module.js"></script>
+    <script src="spa1/spa1.controller.js"></script>
+    <script src="spa1/spa1Comp1/spa1Comp1.component.js"></script>
     <!--MODULE components-->
     <script src="module1/module1.module.js"></script>
     <script src="module1/module1comp1/module1comp1.component.js"></script>
