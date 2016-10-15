@@ -24,6 +24,7 @@ var browserSync = require('browser-sync').create();
 var _ = require('lodash');
 var streamqueue = require('streamqueue');
 var fs = require('fs');
+var exec = require('child_process').exec;
 
 var vars = {
   dirApp: 'app',
@@ -33,8 +34,6 @@ var vars = {
   dirConfig: 'config',
   dirBowerComponents: 'bower_components',
 };
-
-
 
 gulp.task('set-env', [], function () {
   var envFile = gutil.env.envFile;
@@ -203,18 +202,16 @@ gulp.task('html', [], function () {
 gulp.task('images', [], function () {
   return gulp.src(vars.dirImg + '/{,**/}*.*')
     .pipe(imagemin())
-    .pipe(gulp.dest(_.template('${dirDist}/${app}/${dirImg}')({
+    .pipe(gulp.dest(_.template('${dirDist}/${app}/img')({
       dirDist: vars.dirDist,
-      dirImg: vars.dirImg,
       app: gutil.env.name,
     })));
 });
 
 gulp.task('fonts', [], function () {
   return gulp.src(['content/fonts/{,**/}*.*'])
-    .pipe(gulp.dest(_.template('${dirDist}/${app}/${dirFont}')({
+    .pipe(gulp.dest(_.template('${dirDist}/${app}/font')({
       dirDist: vars.dirDist,
-      dirFont: vars.dirFont,
       app: gutil.env.name,
     })));
 });
@@ -254,13 +251,17 @@ gulp.task('build-all', ['clean'], function (cb) {
     .map(function (fileName) { return fileName.slice(0, -5); });
   var taskList = appList.map(function (appName) {
     var taskName = 'build-' + appName;
-    gulp.task(taskName, function () {
-      gutil.env.name = appName;
-      runSequence('build');
+    gulp.task(taskName, function (cbTask) {
+      exec('gulp build --name=' + appName, function (err) {
+        if (err) return cbTask(err); // return error
+        return cbTask(); // finished task
+      });
     });
     return taskName;
   });
-  runSequence('clean', taskList, cb);
+  return runSequence(taskList, cb);
 });
 
-gulp.task('build', ['set-env', 'styles', 'images', 'fonts', 'html']);
+gulp.task('build', function (cb) {
+  return runSequence(['set-env', 'styles', 'images', 'fonts', 'html'], ['optimize'], cb);
+});
