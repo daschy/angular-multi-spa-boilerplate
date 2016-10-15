@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html ng-app="spa2">
+
+  <head>
+    <title></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+
+
+    <link href="styles/spa2.css" type="text/css" rel="stylesheet">
+
+    <!-- build:vendorsCSS(./) styles/vendors.css-->
+    
+    <!-- endbuild -->
+
+    <link href="img/favicon.ico" rel="shortcut icon">
+  </head>
+
+  <body  ng-controller="spa2Ctrl" ng-cloak >
+
+    <!-- Also a way to navigate -->
+
+    <div class="spa2">
+      <module1-comp1></module1-comp1>
+      <spa2-comp1></spa2-comp1>
+    </div>
+
+
+    <!-- JS from Bower Components -->
+    <!-- build:vendorsJS(./) scripts/vendors-spa2.js -->
+    <script src="bower_components/angular/angular.js"></script>
+   
+    <!-- endbuild -->
+    <!-- Add New Bower Component JS Above -->
+
+    <!-- Main App JS -->
+    <!-- build:appJS(app/) scripts/spa2.js -->
+    <script src="spa2/spa2.module.js"></script>
+    <script src="spa2/spa2.controller.js"></script>
+    <script src="spa2/spa2Comp1/spa2Comp1.component.js"></script>
+    <!--MODULE components-->
+    <script src="module1/module1.module.js"></script>
+    <script src="module1/module1comp1/module1comp1.component.js"></script>
+    <!-- endbuild -->
+    <!-- Add New Component JS Above -->
+
+    <script src="env.js"></script>
+  </body>
+
+</html>
