@@ -3,11 +3,13 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "start": "echo \"Error: no start specified\" && exit 1",
-    "postinstall": "bower install",
-    "preinstall": "echo \"Error: no preinstall specified\" && exit 0",
-    "build": "echo \"Error: no build specified\" && exit 1",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node_modules/.bin/gulp serve",
+    "postinstall": "node_modules/.bin/bower install",
+    "build": "node_modules/.bin/gulp build",
+    "build-all": "node_modules/.bin/gulp build-all",
+    "test": "node_modules/.bin/karma start karma.conf.js",
+    "test.coverage": "node_modules/.bin/karma start karma.conf.js --browsers=PhantomJS --singleRun=true --reporters=coverage",
+    "lint":"node_modules/.bin/eslint ."
   },
   "repository": {
     "type": "git",
@@ -48,8 +50,13 @@
     "gulp-uglify": "^1.5.1",
     "gulp-usemin": "^0.3.21",
     "gulp-util": "^3.0.7",
+    "karma": "^1.3.0",
+    "karma-chrome-launcher": "^2.0.0",
+    "karma-coverage": "^1.1.1",
+    "karma-mocha": "^1.2.0",
+    "karma-phantomjs-launcher": "^1.0.2",
     "lodash": "^4.16.4",
-    "npm": "^3.10.8",
+    "mocha": "^3.1.2",
     "rimraf": "^2.5.4",
     "run-sequence": "^1.2.2",
     "streamqueue": "^1.1.1"

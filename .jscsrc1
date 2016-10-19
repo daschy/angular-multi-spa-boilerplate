@@ -1,8 +1,0 @@
-{
-    "jscs.enable": true,
-    "jscs.preset": "airbnb",
-    "excludeFiles": [
-        "node_modules/**",
-        "bower_components/**"
-    ]
-}

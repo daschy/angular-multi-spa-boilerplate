@@ -38,14 +38,12 @@ var vars = {
 gulp.task('set-env', [], function () {
   var envFile = gutil.env.envFile;
   var envApp = gutil.env.name;
-  if (!envApp)
-  {
+  if (!envApp) {
     gutil.log(gutil.colors.red(_.template('option "--name" is missing')({
 
     })));
     process.exit(0);
-  } else
-  {
+  } else {
     genv({
       file: envFile,
     });
@@ -120,7 +118,7 @@ gulp.task('styles', [], function () {
         // 'bower_components/foundation/scss/',
       ],
     }).on('error', sass.logError))
-    .pipe(concat(_.template('${app}.css')({
+    .pipe(concat(_.template('style.css')({
       app: gutil.env.name,
     })))
     .pipe(gulp.dest(_.template('${dirDist}/${app}/styles')({
