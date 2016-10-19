@@ -94,6 +94,6 @@ npm test.coverage
 1. in `app/fooApp/fooApp.html`
     1. add/remove/update all the dependencies specific to your project
   
-    1. add in `files: []` your new project files
+    1. add in `karma.conf.js` at `files: []` your new project files
   
 
