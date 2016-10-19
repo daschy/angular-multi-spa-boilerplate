@@ -1,4 +1,4 @@
-# angular-multi-spa
+# angular multi single page application boilerplate
 
 Boilerplate for a modular multi spa (Single Page Application) in a single code base.
 Inspired by https://johnpapa.net/angular-app-structuring-guidelines/.
